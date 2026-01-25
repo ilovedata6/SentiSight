@@ -1,0 +1,42 @@
+[project]
+name = "sentisight"
+version = "0.1.0"
+description = "AI system that analyzes customer feedback (reviews, support tickets, surveys) to extract sentiment, classify issues, detect anomalies (angry customers, trending problems), and generate actionable insights"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    # Data processing
+    "pandas>=2.2.0",
+    "numpy>=1.26.0",
+    
+    # ML & NLP
+    "scikit-learn>=1.4.0",
+    "transformers>=4.36.0",
+    "torch>=2.1.0",
+    "sentence-transformers>=2.2.0",
+    
+    # API & Web
+    "fastapi>=0.109.0",
+    "uvicorn[standard]>=0.27.0",
+    "pydantic>=2.5.0",
+    "streamlit>=1.30.0",
+    
+    # Database
+    "psycopg2-binary>=2.9.9",
+    "sqlalchemy>=2.0.25",
+    "pgvector>=0.2.4",
+    
+    # Utilities
+    "python-dotenv>=1.0.0",
+    "python-multipart>=0.0.6",
+    "aiofiles>=23.2.1",
+    
+    # Visualization
+    "matplotlib>=3.8.0",
+    "seaborn>=0.13.0",
+    "plotly>=5.18.0",
+    
+    # Testing
+    "pytest>=7.4.0",
+    "httpx>=0.26.0",
+]

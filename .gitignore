@@ -1,0 +1,85 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+*.pyo
+*.pyd
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*.ipynb_checkpoints/
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.nox/
+
+# Documentation (keep only README.md)
+IMPLEMENTATION.md
+QUICKSTART.md
+PROJECT_COMPLETE.md
+project_plan.md
+
+# Data files
+data/*.csv
+data/*.json
+data/*.parquet
+*.db
+*.sqlite
+
+# Models and cache
+models/
+*.pkl
+*.h5
+*.pth
+*.onnx
+.cache/
+
+# Logs
+*.log
+logs/
+
+# Environment variables
+.env.local
+.env.*.local
+
+# Docker
+.dockerignore
+
+# OS
+Thumbs.db
+.DS_Store
