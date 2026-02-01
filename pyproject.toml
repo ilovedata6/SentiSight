@@ -3,7 +3,7 @@ name = "sentisight"
 version = "0.1.0"
 description = "AI system that analyzes customer feedback (reviews, support tickets, surveys) to extract sentiment, classify issues, detect anomalies (angry customers, trending problems), and generate actionable insights"
 readme = "README.md"
-requires-python = ">=3.13"
+requires-python = ">=3.12"
 dependencies = [
     # Data processing
     "pandas>=2.2.0",

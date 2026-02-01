@@ -20,6 +20,7 @@ sys.path.insert(0, str(project_root))
 
 from src.models import SentimentAnalyzer, CategoryClassifier, AnomalyDetector
 from src.preprocessing import TextPreprocessor, DataLoader
+import torch
 import warnings
 warnings.filterwarnings('ignore')
 
@@ -30,6 +31,15 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded"
 )
+
+# Check GPU availability
+GPU_AVAILABLE = torch.cuda.is_available()
+if GPU_AVAILABLE:
+    GPU_NAME = torch.cuda.get_device_name(0)
+    GPU_MEMORY = torch.cuda.get_device_properties(0).total_memory / 1e9
+else:
+    GPU_NAME = "Not Available"
+    GPU_MEMORY = 0
 
 # Custom CSS
 st.markdown("""
@@ -71,14 +81,58 @@ if 'category_classifier' not in st.session_state:
 if 'anomaly_detector' not in st.session_state:
     st.session_state.anomaly_detector = None
 
+# Check GPU availability
+GPU_AVAILABLE = torch.cuda.is_available()
+if GPU_AVAILABLE:
+    GPU_NAME = torch.cuda.get_device_name(0)
+    GPU_MEMORY = torch.cuda.get_device_properties(0).total_memory / 1e9
+else:
+    GPU_NAME = "Not Available"
+    GPU_MEMORY = 0
+
 
 @st.cache_resource
 def load_models():
-    """Load ML models (cached)"""
-    with st.spinner("Loading ML models..."):
-        sentiment_analyzer = SentimentAnalyzer()
+    """Load ML models with GPU support (cached)"""
+    progress_placeholder = st.empty()
+    
+    with progress_placeholder.container():
+        st.info("🚀 Loading AI models... This may take 15-30 seconds on first run.")
+        progress_bar = st.progress(0)
+        status_text = st.empty()
+        
+        import time
+        start_time = time.time()
+        
+        # Load sentiment analyzer (heaviest model - DistilBERT)
+        progress_bar.progress(10)
+        status_text.text("🤖 Loading Sentiment Analyzer (DistilBERT)...")
+        model_start = time.time()
+        sentiment_analyzer = SentimentAnalyzer(use_gpu=True)
+        sentiment_time = time.time() - model_start
+        
+        # Load category classifier
+        progress_bar.progress(50)
+        status_text.text("📊 Loading Category Classifier...")
+        model_start = time.time()
         category_classifier = CategoryClassifier()
+        category_time = time.time() - model_start
+        
+        # Load anomaly detector
+        progress_bar.progress(80)
+        status_text.text("🚨 Initializing Anomaly Detector...")
+        model_start = time.time()
         anomaly_detector = AnomalyDetector()
+        anomaly_time = time.time() - model_start
+        
+        progress_bar.progress(100)
+        total_time = time.time() - start_time
+        
+        device_info = f"GPU ({GPU_NAME})" if GPU_AVAILABLE else "CPU"
+        status_text.success(f"✅ All models loaded in {total_time:.1f}s on {device_info}")
+        time.sleep(1)
+    
+    progress_placeholder.empty()
     return sentiment_analyzer, category_classifier, anomaly_detector
 
 
@@ -147,6 +201,16 @@ def main():
     
     # Sidebar
     st.sidebar.title("⚙️ Settings")
+    
+    # System info
+    with st.sidebar.expander("💻 System Info", expanded=False):
+        st.write("**Device:**")
+        if GPU_AVAILABLE:
+            st.success(f"🚀 GPU: {GPU_NAME}")
+            st.info(f"📊 Memory: {GPU_MEMORY:.1f} GB")
+        else:
+            st.warning("💻 CPU Mode")
+        st.write("**PyTorch:**", torch.__version__)
     
     # Mode selection
     mode = st.sidebar.radio(

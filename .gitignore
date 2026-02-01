@@ -23,6 +23,8 @@ wheels/
 # Virtual environments
 .env
 .venv
+.venv312
+.venv_old
 env/
 venv/
 ENV/
@@ -83,3 +85,4 @@ logs/
 # OS
 Thumbs.db
 .DS_Store
+tests/

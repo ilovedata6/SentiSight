@@ -74,28 +74,51 @@ feedback_store: List[AnalysisResult] = []
 
 @app.on_event("startup")
 async def load_models():
-    """Load ML models on startup"""
+    """Load ML models on startup with GPU optimization"""
     global sentiment_analyzer, category_classifier, anomaly_detector
     
+    import time
+    
+    logger.info("="*50)
+    logger.info("Starting SentiSight API Server")
+    logger.info("="*50)
+    
+    # Check GPU
+    if torch.cuda.is_available():
+        gpu_name = torch.cuda.get_device_name(0)
+        gpu_memory = torch.cuda.get_device_properties(0).total_memory / 1e9
+        logger.info(f"🚀 GPU Detected: {gpu_name} ({gpu_memory:.1f}GB)")
+    else:
+        logger.info("💻 Running on CPU")
+    
     logger.info("Loading models...")
+    total_start = time.time()
     
     try:
-        # Load sentiment analyzer
-        sentiment_analyzer = SentimentAnalyzer()
-        logger.info("✓ Sentiment analyzer loaded")
+        # Load sentiment analyzer with GPU support
+        start = time.time()
+        sentiment_analyzer = SentimentAnalyzer(use_gpu=True)
+        logger.info(f"✅ Sentiment analyzer loaded ({time.time()-start:.1f}s)")
         
-        # Load category classifier (using keyword-based for now)
+        # Load category classifier
+        start = time.time()
         category_classifier = CategoryClassifier()
-        logger.info("✓ Category classifier loaded")
+        logger.info(f"✅ Category classifier loaded ({time.time()-start:.1f}s)")
         
-        # Initialize anomaly detector (will need training data to fit)
+        # Initialize anomaly detector
+        start = time.time()
         anomaly_detector = AnomalyDetector()
-        logger.info("⚠ Anomaly detector initialized (requires training)")
+        logger.info(f"✅ Anomaly detector initialized ({time.time()-start:.1f}s)")
         
-        logger.info("All models loaded successfully!")
+        total_time = time.time() - total_start
+        logger.info("="*50)
+        logger.info(f"🎉 All models loaded successfully! ({total_time:.1f}s total)")
+        logger.info("🌐 API ready at http://localhost:8000")
+        logger.info("📚 Docs at http://localhost:8000/docs")
+        logger.info("="*50)
         
     except Exception as e:
-        logger.error(f"Error loading models: {e}")
+        logger.error(f"❌ Error loading models: {e}")
         raise
 
 

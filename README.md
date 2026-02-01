@@ -2,7 +2,7 @@
 
 <div align="center">
 
-![Python](https://img.shields.io/badge/python-3.13+-blue.svg)
+![Python](https://img.shields.io/badge/python-3.12+-blue.svg)
 ![FastAPI](https://img.shields.io/badge/FastAPI-0.100+-green.svg)
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 
@@ -176,6 +176,19 @@ print(f"Sentiment: {sentiment['sentiment']} ({sentiment['confidence']:.2%})")
 categories = category_classifier.predict(cleaned)
 print(f"Categories: {', '.join(categories)}")
 ```
+
+---
+
+## Performance & GPU (Measured)
+
+**Measured on NVIDIA Quadro M1200 (4GB) with Python 3.12 + CUDA PyTorch**  
+- DistilBERT model load (first warm run, GPU): **~9.2 s**
+- Inference (single feedback, GPU): **~13.4 ms**
+- Estimated Streamlit-ready time (models + framework): **~13 s**
+
+**Notes:**
+- First-time runs that download model weights may take longer (~45–80 s).
+- To use GPU locally on Windows we installed Python **3.12** and `torch` with CUDA (cu121). See `STARTUP_GUIDE.md` for the downgrade steps and Docker GPU tips.
 
 ---
 
